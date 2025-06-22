@@ -4,6 +4,7 @@
   <v-app-bar :elevation="2">
     <template v-slot:prepend>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon icon="mdi-database" link to="/"></v-app-bar-nav-icon>
     </template>
 
     <v-app-bar-title><strong>{{ props.title }}</strong></v-app-bar-title>

@@ -17,6 +17,10 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -e development -p 3000 -b '0.0.0.0'"
     volumes:
       - ./api:/api
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minio123}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-mybucket}
     ports:
       - '3000:3000'
     depends_on:

@@ -7,7 +7,7 @@
         <strong>
           Top drawings
         </strong>
-        <v-btn :to="'/new'" color="green" prepend-icon="mdi-folder-plus-outline">
+        <v-btn :to="'/new'" color="primary" prepend-icon="mdi-folder-plus-outline">
           <strong>新規</strong>
         </v-btn>
       </div>
