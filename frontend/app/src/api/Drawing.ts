@@ -2,11 +2,12 @@ import axios from 'axios';
 
 // 型定義
 export interface DrawingRecord {
+  id: number;
   number: string;
   name: string;
   remarks: string | null;
-  cad_file: File;
-  pdf_file: File;
+  cad_file_url: string;
+  pdf_file_url: string;
   created_at: string;
   updated_at: string;
 }
@@ -27,12 +28,11 @@ export interface PostDrawingParams {
   cad_file: File | null;
   pdf_file: File | null;
 }
+
 /**
- * 打刻履歴を取得する
- * @param idm カードIDm
- * @param limit 最大取得件数（デフォルト: 8）
- * @returns PunchRecord配列
- * @throws Error（401なら「利用登録されていないカードです。」）
+ * 図面登録
+ * @param data 図面データ
+ * @returns 登録した図面データ
  */
 export async function post(data: any): Promise<DrawingRecord> {
   try {
@@ -51,6 +51,40 @@ export async function post(data: any): Promise<DrawingRecord> {
   }
 }
 
+/**
+ * 図面一覧取得
+ * @returns 図面データ配列
+ */
+export async function get(): Promise<DrawingRecord[]> {
+  try {
+    const response = await api.get<DrawingRecord[]>(
+      '/drawings'
+    );
+    return response.data;
+  } catch (err: any) {
+    throw err;
+  }
+}
+
+/**
+ * 図面詳細取得
+ * @returns 図面データ
+ */
+export async function find(id: number): Promise<DrawingRecord> {
+  try {
+    const response = await api.get<DrawingRecord>(
+      `/drawings/${id}`
+    );
+    console.log(response);
+    return response.data;
+  } catch (err: any) {
+    throw err;
+  }
+}
+
+export function ToString_NumberAndName(drawing: DrawingRecord) :string {
+  return `${drawing.number}${drawing.name ? `(${drawing.name})` : ''}`;
+}
 
 // /**
 //  * レコードを「日付 時刻: ラベル」の形式に整形する

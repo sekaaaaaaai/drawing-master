@@ -3,7 +3,7 @@ class DrawingsController < ApplicationController
 
   # GET /drawings
   def index
-    @drawings = Drawing.all
+    @drawings = Drawing.limit(20)
 
     render json: @drawings
   end

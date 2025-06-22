@@ -1,7 +1,8 @@
 // router/index.js
 import { createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
-import NewDrawing from './views/drawings/New.vue'
+import DrawingNew from './views/drawings/New.vue'
+import DrawingShow from './views/drawings/Show.vue'
 
 const routes: RouteRecordRaw[] = [
   { 
@@ -13,8 +14,14 @@ const routes: RouteRecordRaw[] = [
     component: Dashboard,
   },
   { 
-    path: '/new',
-    component: NewDrawing,
+    path: '/drawings/new',
+    component: DrawingNew,
+  },
+  {
+    path: '/drawings/:id',
+    name: 'DrawingShow',
+    component: DrawingShow,
+    props: true, // ← これを付けると props として `id` を受け取れる
   },
 ]
 

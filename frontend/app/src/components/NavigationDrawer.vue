@@ -7,7 +7,7 @@
         <strong>
           Top drawings
         </strong>
-        <v-btn :to="'/new'" color="primary" prepend-icon="mdi-folder-plus-outline">
+        <v-btn :to="'/drawings/new'" color="primary" prepend-icon="mdi-folder-plus-outline">
           <strong>新規</strong>
         </v-btn>
       </div>
@@ -23,15 +23,15 @@
     </v-list-item>    
 
     <template v-for="(d, index) in diaplayedDrawings" :key="index">
-      <v-list-item link>
+      <v-list-item lin :to="`/drawings/${d.id}`">
         <v-list-item-title>
           <div>{{ d.name }}</div>
-          <small>{{ d.drawingNumber }}</small>
+          <small>{{ d.number }}</small>
         </v-list-item-title>
       </v-list-item>
     </template>
 
-    <template v-if="!displayMore">
+    <template v-if="!displayMore && drawings.length > 5">
       <v-divider class="mt-2"></v-divider>
       <v-list-item link class="text-center" @click="() => {displayMore = !displayMore}">
         <strong><small>もっと見る</small></strong>
@@ -42,56 +42,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { get, type DrawingRecord } from '../api/Drawing';
 
-const drawings = [
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-    {
-      drawingNumber: 'C12345',
-      name: "電気回路図○○○○",
-    },
-  ]
+const drawings = ref<DrawingRecord[]>([])
 
-  const displayMore = ref(false); // もっと見る
+const displayMore = ref(false); // もっと見る
 
-  const diaplayedDrawings = computed(() => {
-    return displayMore.value ? drawings : drawings.slice(0, 5);
-  })
+const diaplayedDrawings = computed(() => {
+  return displayMore.value ? drawings.value : drawings.value.slice(0, 5);
+})
+
+onMounted(async () => {
+  drawings.value = await get();
+})
 
 </script>
 
