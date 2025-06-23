@@ -8,9 +8,9 @@ local:
 
 minio:
   service: S3
-  access_key_id: <%= ENV['MINIO_ACCESS_KEY'] %>
-  secret_access_key: <%= ENV['MINIO_SECRET_KEY'] %>
+  access_key_id: <%= ENV['MINIO_ROOT_USER'] %>
+  secret_access_key: <%= ENV['MINIO_ROOT_PASSWORD'] %>
   region: us-east-1
-  endpoint: http://localhost:9000
+  endpoint: <%= ENV['MINIO_ENDPOINT'] %>
   bucket: <%= ENV['MINIO_BUCKET_NAME'] %>
   force_path_style: true

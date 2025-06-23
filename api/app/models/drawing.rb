@@ -15,17 +15,19 @@ class Drawing < ApplicationRecord
   end
 
   def cad_file_url
-    url_for_attachment(cad_file)
+    url_for_file(:cad_file)
   end
 
   def pdf_file_url
-    url_for_attachment(pdf_file)
+    url_for_file(:pdf_file)
   end
 
   private
 
-  def url_for_attachment(file)
+  def url_for_file(attachment_name)
+    file = send(attachment_name)
     return nil unless file.attached?
-    Rails.application.routes.url_helpers.rails_blob_url(file, host: Rails.application.routes.default_url_options[:host])
+
+    Rails.application.routes.url_helpers.rails_blob_url(file)
   end
 end

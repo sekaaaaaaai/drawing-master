@@ -62,6 +62,7 @@ export async function get(): Promise<DrawingRecord[]> {
     );
     return response.data;
   } catch (err: any) {
+    console.error(err);
     throw err;
   }
 }

@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  resources :drawings
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  # ActiveStorageのルーティング（ストリーミング配信用）
+  # mount Rails.application.routes.default_url_options[:host], at: '/'
+  
+  resources :drawings
+  
   # Defines the root path route ("/")
   # root "articles#index"
 end
