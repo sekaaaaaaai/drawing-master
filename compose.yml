@@ -5,8 +5,8 @@ services:
       MYSQL_ROOT_PASSWORD: password
       TZ: "Asia/Tokyo"
     volumes:
+      - db-data:/var/lib/mysql
       - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./db/data:/var/lib/mysql
     ports:
       - '3306:3306'
     restart: always
@@ -36,7 +36,7 @@ services:
       - ${MINIO_PORT:-9000}:9000
       - ${MINIO_CONSOLE_PORT:-9001}:9001
     volumes:
-      - ./minio/data:/export
+      - minio-data:/export
       - ./minio/config:/root/.minio
     environment:
       MINIO_DOMAIN: minio.${HOST_IP:-127.0.0.1}.nip.io
@@ -76,3 +76,7 @@ services:
     command: ["npm", "run", "dev", "--", "--host"]
     depends_on:
       - api
+
+volumes:
+  minio-data:
+  db-data:
