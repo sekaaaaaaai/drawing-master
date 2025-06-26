@@ -1,33 +1,47 @@
 class Drawing < ApplicationRecord
-  has_one_attached :cad_file
-  has_one_attached :pdf_file
-  
   has_many :drawing_tags, dependent: :destroy
   has_many :tags, through: :drawing_tags
+
+  has_many :drawing_revisions, dependent: :destroy
 
   validates :number, presence: true, uniqueness: true
 
   def as_json(options = {})
     super(options).merge({
-      cad_file_url: cad_file_url,
-      pdf_file_url: pdf_file_url
+      latest_revision: drawing_revisions.order(created_at: :desc).first&.as_json,
+      tags: tags.map{|tag| tag.name}
     })
   end
 
-  def cad_file_url
-    url_for_file(:cad_file)
+    # 配列を受け取るカスタムセッター
+  def tag_names=(names)
+    # 配列、文字列、nilの場合を処理
+    normalized_names = case names
+    when Array
+      names.compact.map(&:strip).reject(&:blank?)
+    when String
+      names.split(',').map(&:strip).reject(&:blank?)
+    else
+      []
+    end
+    
+    self.tags = normalized_names.map do |name|
+      Tag.find_or_create_by(name: name)
+    end
   end
-
-  def pdf_file_url
-    url_for_file(:pdf_file)
+  
+  # タグ名の配列を返すカスタムゲッター
+  def tag_names
+    tags.pluck(:name)
   end
-
-  private
-
-  def url_for_file(attachment_name)
-    file = send(attachment_name)
-    return nil unless file.attached?
-
-    Rails.application.routes.url_helpers.rails_blob_url(file)
+  
+  # カンマ区切りの文字列用セッター（後方互換性のため）
+  def tag_list=(tag_string)
+    self.tag_names = tag_string
+  end
+  
+  # カンマ区切りの文字列を返すゲッター
+  def tag_list
+    tag_names.join(', ')
   end
 end

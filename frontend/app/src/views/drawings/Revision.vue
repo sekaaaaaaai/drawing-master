@@ -2,22 +2,14 @@
 
 <template>
   <v-container>
-    <h2>新規図面</h2>
+    <h2>{{ drawing.number }} - {{ title }}</h2>
 
     <v-form @submit.prevent="postDrawing" class="mt-2">
       <v-text-field
         v-model="drawingNumber"
         :rules="[rules.required]"
-        label="図面番号"
+        label="改訂記号"
         variant="outlined"
-      ></v-text-field>
-
-      <v-text-field
-        v-model="drawingName"
-        :rules="[rules.required]"
-        label="図面名称"
-        variant="outlined"
-        class="mt-2"
       ></v-text-field>
 
       <v-file-input
@@ -42,25 +34,6 @@
         multiple
       ></v-file-input>
 
-      <v-combobox
-        variant="outlined"
-        v-model="tags"
-        :items="items"
-        label="タグ"
-        prepend-icon="mdi-tag"
-        chips
-        clearable
-        closable-chips
-        multiple
-      >
-        <template v-slot:chip="{ props, item }">
-          <v-chip v-bind="props">
-            <strong>{{ item.raw }}</strong>&nbsp;
-            <span>(interest)</span>
-          </v-chip>
-        </template>
-      </v-combobox>
-
       <v-textarea
         v-model="remarks"
         variant="outlined"
@@ -70,17 +43,22 @@
       </v-textarea>
 
 
-      <v-btn class="mt-2" type="submit" color="primary" block>新図作成</v-btn>
+      <v-btn class="mt-2" type="submit" color="success" block>改訂</v-btn>
     </v-form>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { post } from '../../api/Drawing';
+import { onMounted, ref } from 'vue';
+import { find, post, type DrawingRecord } from '../../api/Drawing';
 
+const props = defineProps<{
+  id: number
+}>();
 
-const title = "新規図面";
+const title = "図面改訂";
+const drawing = ref<DrawingRecord>();
+
 
 const drawingNumber = ref('');
 const drawingName = ref('');
@@ -122,6 +100,10 @@ const postDrawing = async () => {
     console.error(error);
   }
 }
+
+onMounted(async () => {
+  drawing.value = await find(props.id)
+})
 
 defineExpose({
   title,

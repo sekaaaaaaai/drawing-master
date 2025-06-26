@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_06_22_060133) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_24_034727) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_22_060133) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "drawing_revisions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "drawing_id", null: false
+    t.string "symbol"
+    t.text "remarks"
+    t.bigint "previous_revision_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["drawing_id"], name: "index_drawing_revisions_on_drawing_id"
+    t.index ["previous_revision_id"], name: "index_drawing_revisions_on_previous_revision_id"
   end
 
   create_table "drawing_tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -67,6 +78,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_22_060133) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "drawing_revisions", "drawing_revisions", column: "previous_revision_id"
+  add_foreign_key "drawing_revisions", "drawings"
   add_foreign_key "drawing_tags", "drawings"
   add_foreign_key "drawing_tags", "tags"
 end

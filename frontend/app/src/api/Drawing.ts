@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { type DrawingRevisionRecord } from './DrawingRevision';
 
 // 型定義
 export interface DrawingRecord {
@@ -6,10 +7,10 @@ export interface DrawingRecord {
   number: string;
   name: string;
   remarks: string | null;
-  cad_file_url: string;
-  pdf_file_url: string;
   created_at: string;
   updated_at: string;
+
+  latest_revision?: DrawingRevisionRecord; // ← オプションとして定義
 }
 
 // Axiosインスタンス（ベースURLと共通ヘッダー）

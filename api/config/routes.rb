@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
-
-  # ActiveStorageのルーティング（ストリーミング配信用）
-  # mount Rails.application.routes.default_url_options[:host], at: '/'
-  
+  resources :drawing_revisions
   resources :drawings
-  
-  # Defines the root path route ("/")
-  # root "articles#index"
+
 end
